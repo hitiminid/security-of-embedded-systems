@@ -6,7 +6,8 @@ def load_text(file_path: str):
             lines.append(line)
 
     text = ''.join(lines)
-    validate_text(text)
+    if not validate_text(text):
+        raise Exception("Invalid character!")
 
     return text
 
@@ -15,5 +16,4 @@ def validate_text(text: str):
     for bit in text:
         if bit not in ('0', '1'):
             return False
-            # raise Exception('Illegal char!')
     return True

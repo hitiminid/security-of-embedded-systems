@@ -1,7 +1,6 @@
 import utility
 import math
 import scipy.special as scipy
-# from . import tests.frequency_test
 
 
 def perform_block_frequency_test(bits: str, M: int):
