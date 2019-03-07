@@ -9,7 +9,6 @@ def perform_monobit_test(bits: str):
 	p_value = compute_p_value(s_obs)
 	result = is_string_random(p_value)
 	print(result)
-	# print(erfc)
 
 def produce_convertion_sum(bits: str):
 	"""
@@ -37,9 +36,9 @@ def compute_p_value(s_obs):
 
 
 def is_string_random(p_value):
-	return True if p_value > 0.01 else False
+	return True if p_value >= 0.01 else False
 
 
-file_path = "/home/pietrek/UCZELNIA/MGR/embedded-security/List_2/Assigment_3/tests/test"
-text = utility.load_text(file_path)
-perform_monobit_test(text)
+# file_path = "/home/pietrek/UCZELNIA/MGR/embedded-security/List_2/Assigment_3/tests/test"
+# text = utility.load_text(file_path)
+# perform_monobit_test(text)
