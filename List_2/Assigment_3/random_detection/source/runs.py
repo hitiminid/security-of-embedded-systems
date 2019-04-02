@@ -3,6 +3,7 @@ import math
 
 
 def perform_runs_test(bits: str):
+    # bits = "1100100100001111110110101010001000100001011010001100001000110100110001001100011001100010100010111000"
     n = len(bits)
     test_applicable, pi = prerequisite_frequency_test(bits, n)
     
@@ -34,7 +35,7 @@ def perform_main_test(bits, n, pi):
     p_value = compute_p_value(v, n, pi)
     print(f'p-value: {p_value}')
     is_random = is_string_random(p_value)
-    print('is random: {is_random}')
+    print(f'is random: {is_random}')
 
 
 def compute_test_statistic(bits, n: int):
@@ -58,6 +59,6 @@ def is_string_random(p_value, threshold=0.01):  # TODO: move to utility
 
 
 
-file_path = "/home/pietrek/UCZELNIA/MGR/embedded-security/List_2/Assigment_3/random_detection/source/test"
-text = utility.load_text(file_path)
-perform_runs_test(text)
+# file_path = "/home/pietrek/UCZELNIA/MGR/embedded-security/List_2/Assigment_3/random_detection/source/test"
+# text = utility.load_text(file_path)
+# perform_runs_test(text)

@@ -20,10 +20,10 @@ architecture complex of lfsr_tb is
   signal LFSR1,LFSR2 : std_logic;
 
   -- just a reminder what will be tested
-  component lfsr 
-    port( 
-          clk  : in STD_LOGIC; 
-          ld   : in STD_LOGIC;  
+  component lfsr
+    port(
+          clk  : in STD_LOGIC;
+          ld   : in STD_LOGIC;
           data : in STD_LOGIC_VECTOR(15 downto 0);
           R    : out STD_LOGIC );
   end component;
@@ -45,12 +45,25 @@ begin
   end process;
 
   -- this will run once and then wait for ever
-  init : process 
+  init : process
   begin
     -- time to tell LFSRs to load up some data
     load <= '1';
     -- and give it to them (to one of them, at least)
-    q2 <= X"FAFA";
+
+    -- q1 <= "1111111100000000";
+    -- q2 <= "1110111101001001";
+
+    q1 <= "1111111111111111";
+    q2 <= "1111111111111111";
+
+    -- q1 <= "1111111100000000";
+    -- q2 <= "1111111100000000";
+
+    -- q1 <= X"FAFA";
+    -- q2 <= X"FAFA";
+
+    -- q1 <= "11111111";
     -- even though LFSRs are async, let's wait for a bit...
     wait until clock'event and clock = '0';
     -- ... and let them run freely
@@ -59,10 +72,10 @@ begin
     wait;
   end process;
 
-  -- okay, what's going on here? well, the 'clocker' process 
+  -- okay, what's going on here? well, the 'clocker' process
   -- keeps running, changing clk -> NOT clk -> clk -> NOT clk ...
   -- and clk is fed to LFSRs, so they are busy working
-  -- the simulation will continue until you kill it, or specify 
-  -- the stop time using '--stop-time=XXX' switch to ghdl 
+  -- the simulation will continue until you kill it, or specify
+  -- the stop time using '--stop-time=XXX' switch to ghdl
 
 end complex;

@@ -3,12 +3,15 @@ import math
 
 
 def perform_monobit_test(bits: str):
-
+	print(f"BITS\n {bits}")
 	conversion_sum = produce_convertion_sum(bits)
+	print(f'conversion_sum = {conversion_sum}')
 	s_obs = compute_test_statistic(bits, conversion_sum)
+	print(f's_obs = {s_obs}')
 	p_value = compute_p_value(s_obs)
+	print(f'p_value = {p_value}')
 	result = is_string_random(p_value)
-	print(result)
+	print(f'is random = {result}')
 
 def produce_convertion_sum(bits: str):
 	"""

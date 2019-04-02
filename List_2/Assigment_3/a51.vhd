@@ -26,15 +26,38 @@ BEGIN
         long_is <= long_data;
       elsif(clk'event and clk = '1')
       then
+        if (short_is(8) = medium_is(10))
+        then
+          short_is(18 downto 1) <= short_is(17 downto 0);
+          short_is(0) <= short_is(18) xor short_is(17) xor short_is(16) xor short_is(13);
 
-        short_is(18 downto 1) <= short_is(17 downto 0);
-        short_is(0) <= short_is(18) xor short_is(17) xor short_is(16) xor short_is(13);
+          medium_is(21 downto 1) <= medium_is(20 downto 0);
+          medium_is(0) <= medium_is(21) xor medium_is(20);
 
-        medium_is(21 downto 1) <= medium_is(20 downto 0);
-        medium_is(0) <= medium_is(21) xor medium_is(20);
+          if (short_is(8) = long_is(10))
+          then
 
-        long_is(22 downto 1) <= long_is(21 downto 0);
-        long_is(0) <= long_is(22) xor long_is(21) xor long_is(20) xor long_is(7);
+            long_is(22 downto 1) <= long_is(21 downto 0);
+            long_is(0) <= long_is(22) xor long_is(21) xor long_is(20) xor long_is(7);
+
+          end if;
+        elsif (short_is(8) = long_is(10))
+        then
+
+          short_is(18 downto 1) <= short_is(17 downto 0);
+          short_is(0) <= short_is(18) xor short_is(17) xor short_is(16) xor short_is(13);
+
+          long_is(22 downto 1) <= long_is(21 downto 0);
+          long_is(0) <= long_is(22) xor long_is(21) xor long_is(20) xor long_is(7);
+
+        else
+          medium_is(21 downto 1) <= medium_is(20 downto 0);
+          medium_is(0) <= medium_is(21) xor medium_is(20);
+
+          long_is(22 downto 1) <= long_is(21 downto 0);
+          long_is(0) <= long_is(22) xor long_is(21) xor long_is(20) xor long_is(7);
+
+        end if;
     end if;
   END PROCESS;
 

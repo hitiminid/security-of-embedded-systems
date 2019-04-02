@@ -7,14 +7,17 @@ def perform_block_frequency_test(bits: str, M: int):
     """
     M - length of each block
     """
+    # bits = "1100100100001111110110101010001000100001011010001100001000110100110001001100011001100010100010111000"
+    # M = 10
 
     blocks = divide_input(bits, M)
+    
     proportion_list = determine_blocks_proportion(blocks, M)
-    # print(f"proportion list: {proportion_list}")
+    print(f"proportion list: {proportion_list}")
     statistic = compute_statistic(proportion_list, M)
-    # print(f"statistic: {statistic}")
-    p_value = compute_p_value(statistic, M)
-    # print(f"p-value: {p_value}")
+    print(f"statistic: {statistic}")
+    p_value = compute_p_value(statistic, len(blocks))
+    print(f"p-value: {p_value}")
     return is_string_random(p_value)
 
 
@@ -46,7 +49,7 @@ def compute_statistic(proportion_list, M):
 
 
 def compute_p_value(statistic, M):
-    return 1 - scipy.gammainc(M / 2, statistic / 2)
+    return 1 - scipy.gammaincc(M / 2, statistic / 2)
 
 
 def is_string_random(p_value):
