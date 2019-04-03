@@ -2,12 +2,10 @@ import pdb
 from collections import Counter
 
 
-class LFSR:  # TODO: probably should be reversed
+class LFSR:
 
-    def __init__(self, length: int, IV: list, voting_bit_position: int,
-                 xoring_bits: list):  # TODO: maybe erase length ???
-        self.length = length
-        self.IV = IV
+    def __init__(self, IV: list, voting_bit_position: int,
+                 xoring_bits: list):
         self.bits = IV
         self.voting_bit_position = voting_bit_position
         self.xoring_bits = xoring_bits
@@ -22,38 +20,17 @@ class LFSR:  # TODO: probably should be reversed
         return self.bits[self.voting_bit_position]
 
     def shift(self):
+
         x = len(self.bits)
         self.bits[1:x] = self.bits[0:x-1]
-        # pdb.set_trace()
-        R = self.bits[self.xoring_bits[0]]
-        R = int(R)
 
+        R = int(self.bits[self.xoring_bits[0]])
         for bit in self.xoring_bits[1:]:
-            R ^= int(self.bits[bit-1])
-
+            R ^= int(self.bits[bit])
         self.bits[0] = str(R)
 
     def __repr__(self):
-        return f"LSFR {self.length} IV: {self.IV}"
-
-
-def main():
-    IV = ['1'] * 64
-    a5_1 = A5_1(IV)
-
-    limit = [1] * 64
-
-    for number, _ in zip(a5_1, limit):
-        print(number)
-
-    # def __getitem__(self, i):
-    #     return self.bits[i]
-    #
-    # def __setitem__(self, i, value):
-    #     self.bits[i] = value
-    #
-    # def __len__(self):
-    #     return len(self.bits)
+        return f"LSFR {len(self.bits)}"
 
 
 class A5_1:
@@ -63,9 +40,9 @@ class A5_1:
         xoring_bits_2 = [20, 21]
         xoring_bits_3 = [7, 20, 21, 22]
 
-        self.lfsr_1 = LFSR(19, IV[:19], 8, xoring_bits_1)
-        self.lfsr_2 = LFSR(22, IV[19:-24], 10, xoring_bits_2)
-        self.lfsr_3 = LFSR(23, IV[-23:], 10, xoring_bits_3)
+        self.lfsr_1 = LFSR(IV[:19], 8, xoring_bits_1)
+        self.lfsr_2 = LFSR(IV[19:-23], 10, xoring_bits_2)
+        self.lfsr_3 = LFSR(IV[-23:], 10, xoring_bits_3)
 
     def out(self):
         """
@@ -74,7 +51,6 @@ class A5_1:
         return self.lfsr_1.out() ^ self.lfsr_2.out() ^ self.lfsr_3.out()
 
     def shift(self):
-
         majority_bit = self.majority_voting()
 
         if majority_bit == self.lfsr_1.vote():
@@ -102,6 +78,14 @@ class A5_1:
 
     def get_state(self):
         return self.lfsr_1.state() + self.lfsr_2.state() + self.lfsr_3.state()
+
+
+def main():
+    IV = ['1'] * 64
+    a5_1 = A5_1(IV)
+    limit = [1] * 512
+    for number, _ in zip(a5_1, limit):
+        print(number)
 
 
 if __name__ == "__main__":
