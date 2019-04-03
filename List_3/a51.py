@@ -21,25 +21,25 @@ class LFSR:  # TODO: probably should be reversed
         return self.bits[self.voting_bit_position]
 
     def shift(self):
-        x = len(self.bits) - 1
-        self.bits[x:1] = self.bits[x-1:0]
+        x = len(self.bits)
+        self.bits[1:x] = self.bits[0:x-1]
         R = self.bits[self.xoring_bits[0]]
 
-        for i in range(1, len(self.xoring_bits)):
-            R ^= self.bits[i]
+        for bit in self.xoring_bits[1:]:
+            R ^= self.bits[bit-1]
         self.bits[0] = R
 
     def __repr__(self):
-        return f"LSFR{self.length} IV: {self.IV}"
+        return f"LSFR {self.length} IV: {self.IV}"
 
-    def __getitem__(self, i):
-        return self.bits[i]
-
-    def __setitem__(self, i, value):
-        self.bits[i] = value
-
-    def __len__(self):
-        return len(self.bits)
+    # def __getitem__(self, i):
+    #     return self.bits[i]
+    #
+    # def __setitem__(self, i, value):
+    #     self.bits[i] = value
+    #
+    # def __len__(self):
+    #     return len(self.bits)
 
 
 class A5_1:
@@ -62,7 +62,7 @@ class A5_1:
     def shift(self):
 
         majority_bit = self.majority_voting()
-
+        
         if majority_bit == self.lfsr_1.vote():
             self.lfsr_1.shift()
 
@@ -77,21 +77,18 @@ class A5_1:
         Count the votes and return most common one.
         """
         votes = [self.lfsr_1.vote(), self.lfsr_2.vote(), self.lfsr_3.vote()]
-        return Counter(votes).most_common(1)
-
+        return Counter(votes).most_common(1)[0][0]
 
     def run(self, cycles):
         for i in range(cycles):
             self.shift()
-        return self.IV
+            print(f'IV = {self.get_state()}')
+        return self.get_state()
+
+    def get_state(self):
+        return self.lfsr_1.state() + self.lfsr_2.state() + self.lfsr_3.state()
 
 
-# IV = [1] * 19 + [0] * 22 + 23 * [2]
-IV = [0] * 18 + [1]
-IV += [0] * 22
-IV += [0] * 23
-
+IV = [1] * 64
 a51 = A5_1(IV)
-out = a51.out()
-
-breakpoint()
+ajwi = a51.run(3)

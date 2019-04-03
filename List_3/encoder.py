@@ -10,7 +10,6 @@ class Encoder:
     FRAME_DATA_SIZE = 8
     FRAME_DATA_START = 2
 
-
     def __init__(self, iv):
         self.iv = iv
 
