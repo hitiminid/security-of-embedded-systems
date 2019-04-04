@@ -10,17 +10,22 @@ class LFSR:
         self.voting_bit_position = voting_bit_position
         self.xoring_bits = xoring_bits
 
-    def state(self):
-        return self.bits
-
     def out(self):
+        """
+        Return out bit.
+        """
         return int(self.bits[len(self.bits)-1])
 
     def vote(self):
+        """
+        Return vote bit.
+        """
         return self.bits[self.voting_bit_position]
 
     def shift(self):
-
+        """
+        Shift inner bits.
+        """
         x = len(self.bits)
         self.bits[1:x] = self.bits[0:x-1]
 
@@ -51,6 +56,9 @@ class A5_1:
         return self.lfsr_1.out() ^ self.lfsr_2.out() ^ self.lfsr_3.out()
 
     def shift(self):
+        """
+        Perform bit shift of all LFSRs according to majority rule.
+        """
         majority_bit = self.majority_voting()
 
         if majority_bit == self.lfsr_1.vote():
@@ -76,16 +84,22 @@ class A5_1:
         self.shift()
         return self.out()
 
-    def get_state(self):
-        return self.lfsr_1.state() + self.lfsr_2.state() + self.lfsr_3.state()
+    def get_bits(self, number_of_bits):
+        """
+        Return an array containing number of following output bits.
+        """
+        return [next(self) for _ in range(number_of_bits)]
 
+
+    def get_state(self):
+        return self.lfsr_1.bits + self.lfsr_2.bits + self.lfsr_3.bits
 
 def main():
     IV = ['1'] * 64
     a5_1 = A5_1(IV)
-    limit = [1] * 512
-    for number, _ in zip(a5_1, limit):
-        print(number)
+    bits = a5_1.get_bits(64)
+    for bit in bits:
+        print(bit)
 
 
 if __name__ == "__main__":
