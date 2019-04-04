@@ -1,5 +1,6 @@
 from a51 import A5_1
 import utils
+import pdb
 
 class Cipher:
 
@@ -10,18 +11,25 @@ class Cipher:
     def perform_encryption(self, message_chunks):
         f_no = self.frame_no
         msg_length = len(message_chunks)
-        self.frame_no += msg_length // 8
-        bits = a51.get_bits(msg_length * 8)
-        noises = list(utils.chunks(bits, 8))
+        self.frame_no += msg_length
+        encoded = []
 
-        for chunk, noise in zip(message_chunks, noises):
-            ciphertext = self.perform_xor(chunk, noise)
+        for message_chunk in message_chunks:
+            bits = self.a51.get_bits(len(message_chunk) * 8)
+            chunked_bits = list(utils.chunks(bits, 8))
+            chunked_bits = [self.chunk_to_int(chunk) for chunk in chunked_bits]
+            ciphertext = self.perform_xor(message_chunk, chunked_bits)
+            encoded.append(ciphertext)
 
-        return f_no, ciphertext
+        return f_no, encoded
+
+    def chunk_to_int(self,chunk):
+        chunk = [str(i) for i in chunk]
+        chunk = ''.join(chunk)
+        return int(chunk,2)
 
     def perform_xor(self, text, key):
         return [m ^ k for m, k in zip(text, key)]
-
 
     def perform_decryption(self, messages, frame_nos):
         decrypted_messages = []
@@ -30,13 +38,10 @@ class Cipher:
             if not self.frame_no == frame_no:
                 raise Exception('Wrong frame numbers!!!')
             self.frame_no += 1
+            bits = self.a51.get_bits(64)
+            chunked_bits = list(utils.chunks(bits, 8))
+            chunked_bits = [self.chunk_to_int(chunk) for chunk in chunked_bits]
+            plaintext = self.perform_xor(ciphertext, chunked_bits)
+            decrypted_messages.append(plaintext)
 
-            bits = a51.get_bits(8)
-            decrypted_messages.append(perform_xor(ciphertext, bits))
         return decrypted_messages
-
-
-
-# message = [1,0,1,0,1]
-# key = [1,1,1,1,1]
-# cipher = perform_encryption(message, key)

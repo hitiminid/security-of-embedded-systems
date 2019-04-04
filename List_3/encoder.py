@@ -10,8 +10,8 @@ class Encoder:
     FRAME_DATA_SIZE = 8
     FRAME_DATA_START = 2
 
-    def __init__(self, Cipher):
-        self.Cipher = cipher.Cipher
+    def __init__(self, cipher):
+        self.Cipher = cipher
 
     @staticmethod
     def generate_IV():
@@ -66,22 +66,5 @@ class Encoder:
         return s, carry
 
 
-    def __check_checksum(self, frame):
-        s, carry = __create_checksum(frame)
-        return s == frame[10] and carry == frame[11] and frame[0] == 255 and (frame[12] == 0 or frame[12] == 255)
-
-
     def __create_ending(self, is_last):
         return [0] if is_last else [255]
-
-
-encoder = Encoder('s')
-# message = [128, 128, 128, 128, 128, 128, 128, 128, 128]
-# message = [255, 0, 128, 128, 128, 128, 128, 128, 128, 128, 13, 4, 0]
-# frame = encoder.frame_data(message)
-# import pdb; pdb.set_trace()
-# print(check_sum)
-
-message = [128] * 9
-out = encoder.split_and_pad_data(message)
-import pdb; pdb.set_trace()

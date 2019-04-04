@@ -4,8 +4,7 @@ from collections import Counter
 
 class LFSR:
 
-    def __init__(self, IV: list, voting_bit_position: int,
-                 xoring_bits: list):
+    def __init__(self, IV: list, voting_bit_position: int, xoring_bits: list):
         self.bits = IV
         self.voting_bit_position = voting_bit_position
         self.xoring_bits = xoring_bits
@@ -45,9 +44,20 @@ class A5_1:
         xoring_bits_2 = [20, 21]
         xoring_bits_3 = [7, 20, 21, 22]
 
+        IV = self.convert_to_bits(IV)
+
         self.lfsr_1 = LFSR(IV[:19], 8, xoring_bits_1)
         self.lfsr_2 = LFSR(IV[19:-23], 10, xoring_bits_2)
         self.lfsr_3 = LFSR(IV[-23:], 10, xoring_bits_3)
+
+    def convert_to_bits(self, IV):
+        bits = []
+
+        for element in IV:
+            byte = "{0:08b}".format(element)
+            bits += byte
+
+        return bits
 
     def out(self):
         """
@@ -90,12 +100,11 @@ class A5_1:
         """
         return [next(self) for _ in range(number_of_bits)]
 
-
     def get_state(self):
         return self.lfsr_1.bits + self.lfsr_2.bits + self.lfsr_3.bits
 
 def main():
-    IV = ['1'] * 64
+    IV = [15, 11, 112, 203, 41, 95, 255, 28]
     a5_1 = A5_1(IV)
     bits = a5_1.get_bits(64)
     for bit in bits:
